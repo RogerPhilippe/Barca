@@ -10,6 +10,7 @@ async function call(channel, ...args) {
 const EVENTS = new Set(['log', 'queue:update', 'queue:done']);
 
 contextBridge.exposeInMainWorld('oz', {
+  platform: process.platform,
   local: {
     home: () => call('local:home'),
     list: (dir) => call('local:list', dir),

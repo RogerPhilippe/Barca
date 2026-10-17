@@ -1,7 +1,7 @@
 {
   "name": "barca",
   "productName": "Barca",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cliente FTP, FTPS e SFTP moderno para macOS",
   "main": "src/main/main.js",
   "license": "AGPL-3.0-or-later",
@@ -9,10 +9,10 @@
   "scripts": {
     "start": "electron .",
     "icon": "bash scripts/make-icon.sh",
-    "package": "electron-packager . Barca --platform=darwin --arch=arm64 --out=dist --overwrite --icon=build/icon.icns --app-bundle-id=org.barcaftp.barca --extend-info=build/extend-info.plist --ignore=^/dist --ignore=^/scripts --ignore=^/build",
-    "sign": "codesign --force --deep --sign - dist/Barca-darwin-arm64/Barca.app",
-    "zip": "cd dist && rm -f Barca-$npm_package_version-macos-arm64.zip && ditto -c -k --sequesterRsrc --keepParent Barca-darwin-arm64/Barca.app Barca-$npm_package_version-macos-arm64.zip && shasum -a 256 Barca-$npm_package_version-macos-arm64.zip > SHA256SUMS.txt",
-    "dist": "npm run package && npm run sign && npm run zip"
+    "dist": "node scripts/package.js all",
+    "dist:mac": "node scripts/package.js mac",
+    "dist:win": "node scripts/package.js win",
+    "dist:linux": "node scripts/package.js linux"
   },
   "dependencies": {
     "basic-ftp": "^6.2.3",

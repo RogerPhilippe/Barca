@@ -230,7 +230,9 @@ function createWindow() {
     minWidth: 960,
     minHeight: 600,
     title: 'Barca',
-    titleBarStyle: 'hiddenInset',
+    ...(process.platform === 'darwin'
+      ? { titleBarStyle: 'hiddenInset' }
+      : { autoHideMenuBar: true, icon: path.join(__dirname, '..', 'assets', 'icon.png') }),
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1c1d21' : '#f5f6f8',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

@@ -33,6 +33,12 @@ class SiteStore {
     if (!this.safeStorage.isEncryptionAvailable()) {
       throw new Error('Criptografia do sistema indisponível: a senha não pode ser salva com segurança.');
     }
+    // Sem GNOME Keyring/KWallet, o Linux cai num backend que só ofusca a senha.
+    if (process.platform === 'linux' && this.safeStorage.getSelectedStorageBackend() === 'basic_text') {
+      throw new Error(
+        'Nenhum cofre de senhas do sistema (GNOME Keyring ou KWallet) disponível: a senha não pode ser salva com segurança.',
+      );
+    }
     return this.safeStorage.encryptString(value).toString('base64');
   }
 

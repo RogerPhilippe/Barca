@@ -71,15 +71,24 @@ select {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px 10px 84px; /* espaço para os botões de janela do macOS */
+  padding: 10px 14px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
+}
+
+/* No macOS a barra de título é integrada: espaço para os botões da janela e área de arrasto */
+.platform-darwin .toolbar {
+  padding-left: 84px;
   -webkit-app-region: drag;
 }
 
-.toolbar > *,
-.quick > * {
+.platform-darwin .toolbar > *,
+.platform-darwin .quick > * {
   -webkit-app-region: no-drag;
+}
+
+.platform-darwin .brand {
+  -webkit-app-region: drag;
 }
 
 .brand {
@@ -88,7 +97,6 @@ select {
   gap: 8px;
   font-weight: 650;
   font-size: 14px;
-  -webkit-app-region: drag;
 }
 
 .logo {

@@ -32,7 +32,37 @@ function parentPath(p) {
   return i <= 0 ? '/' : t.slice(0, i);
 }
 
-const baseName = (p) => p.replace(/\/+$/, '').split('/').pop() || '/';
+const baseName = (p) => p.replace(/[\\/]+$/, '').split(/[\\/]/).pop() || p;
+
+// Caminhos locais seguem o sistema: no Windows são "C:\pasta", nos demais são POSIX.
+const PLATFORM = oz.platform;
+const WIN = PLATFORM === 'win32';
+const isDriveRoot = (p) => /^[A-Za-z]:[\\/]*$/.test(p);
+
+function localJoin(dir, name) {
+  if (!WIN) return joinPath(dir, name);
+  return `${dir.replace(/[\\/]+$/, '')}\\${name}`;
+}
+
+function localParent(p) {
+  if (!WIN) return parentPath(p);
+  const t = p.replace(/[\\/]+$/, '');
+  if (isDriveRoot(t)) return `${t}\\`;
+  const i = Math.max(t.lastIndexOf('\\'), t.lastIndexOf('/'));
+  if (i < 0) return p;
+  const up = t.slice(0, i);
+  return isDriveRoot(up) ? `${up}\\` : up;
+}
+
+const FILE_MANAGER = WIN ? 'Explorador de Arquivos' : PLATFORM === 'darwin' ? 'Finder' : 'gerenciador de arquivos';
+const SECRET_STORE =
+  PLATFORM === 'darwin'
+    ? 'o Keychain do macOS'
+    : WIN
+      ? 'a proteção de dados do Windows'
+      : 'o cofre de senhas do sistema (GNOME Keyring ou KWallet)';
+const MOD_KEY = PLATFORM === 'darwin' ? '⌘' : 'Ctrl+';
+document.body.classList.add(`platform-${PLATFORM}`);
 
 const DEFAULT_PORTS = { sftp: 22, ftp: 21, ftps: 21, 'ftps-implicit': 990 };
 const PROTO_LABELS = { sftp: 'SFTP', ftp: 'FTP', ftps: 'FTPS', 'ftps-implicit': 'FTPS implícito' };
@@ -272,6 +302,22 @@ class Pane {
     return this.isRemote ? App.local : App.remote;
   }
 
+  joinIn(dir, name) {
+    return this.isRemote ? joinPath(dir, name) : localJoin(dir, name);
+  }
+
+  parent(p) {
+    return this.isRemote ? parentPath(p) : localParent(p);
+  }
+
+  isRoot(p) {
+    return p === '/' || (!this.isRemote && WIN && isDriveRoot(p));
+  }
+
+  invalidName(name) {
+    return this.isRemote || !WIN ? name.includes('/') : /[\\/:*?"<>|]/.test(name);
+  }
+
   _build() {
     const remote = this.isRemote;
     this.el.innerHTML = `
@@ -365,7 +411,7 @@ class Pane {
     const remote = this.isRemote;
     const extra = remote ? '<td></td>' : '';
     const html = [];
-    if (this.path && this.path !== '/') {
+    if (this.path && !this.isRoot(this.path)) {
       html.push(
         `<tr class="up-row" data-i="-1"><td class="name"><div class="nm">${ICONS.folder}<span>..</span></div></td><td></td><td></td>${extra}</tr>`,
       );
@@ -448,9 +494,9 @@ class Pane {
   }
 
   async open(i) {
-    if (i < 0) return this.load(parentPath(this.path));
+    if (i < 0) return this.load(this.parent(this.path));
     const e = this.rows[i];
-    const full = joinPath(this.path, e.name);
+    const full = this.joinIn(this.path, e.name);
     if (e.isDir) return this.load(full);
     if (e.isLink && (await this.load(full, { quiet: true }))) return true; // link para pasta
     return App.transfer(this, [e]);
@@ -470,7 +516,7 @@ class Pane {
   }
 
   _bind() {
-    $('.up', this.el).onclick = () => this.path && this.load(parentPath(this.path));
+    $('.up', this.el).onclick = () => this.path && this.load(this.parent(this.path));
     $('.refresh', this.el).onclick = () => this.refresh();
     $('.home', this.el)?.addEventListener('click', async () => this.load(await oz.local.home()));
 
@@ -518,12 +564,12 @@ class Pane {
       const mod = e.metaKey || e.ctrlKey;
       const sel = this.selected();
       if (e.key === 'Enter') {
-        if (sel.length === 1 && sel[0].isDir) this.load(joinPath(this.path, sel[0].name));
+        if (sel.length === 1 && sel[0].isDir) this.load(this.joinIn(this.path, sel[0].name));
         else if (sel.length) App.transfer(this, sel);
       } else if ((e.key === 'Backspace' && mod) || e.key === 'Delete') {
         App.remove(this);
       } else if (e.key === 'Backspace' || (e.key === 'ArrowUp' && mod)) {
-        this.load(parentPath(this.path));
+        this.load(this.parent(this.path));
       } else if (e.key === 'ArrowDown' && mod) {
         if (sel.length === 1) this.open(this.rows.indexOf(sel[0]));
       } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
@@ -546,7 +592,7 @@ class Pane {
       if (!this.sel.has(this.rows[i].name)) this.selectOnly(i);
       dragState = { from: this, dir: this.path, entries: this.selected() };
       e.dataTransfer.effectAllowed = 'copy';
-      e.dataTransfer.setData('text/plain', dragState.entries.map((x) => joinPath(this.path, x.name)).join('\n'));
+      e.dataTransfer.setData('text/plain', dragState.entries.map((x) => this.joinIn(this.path, x.name)).join('\n'));
     });
     this.tbody.addEventListener('dragend', () => {
       dragState = null;
@@ -576,7 +622,7 @@ class Pane {
       const tr = e.target.closest('tr.dir');
       this.el.classList.remove('drop');
       this._setDropRow(null);
-      const toDir = tr ? joinPath(this.path, this.rows[Number(tr.dataset.i)].name) : this.path;
+      const toDir = tr ? this.joinIn(this.path, this.rows[Number(tr.dataset.i)].name) : this.path;
       if (dragState) {
         const { from, dir, entries } = dragState;
         dragState = null;
@@ -702,7 +748,7 @@ const QueueUI = {
     this.empty.hidden = list.length > 0;
     this.empty.textContent =
       this.tab === 'pending'
-        ? 'Arraste arquivos entre os painéis (ou do Finder para o servidor) para transferir.'
+        ? `Arraste arquivos entre os painéis (ou do ${FILE_MANAGER} para o servidor) para transferir.`
         : this.tab === 'failed'
           ? 'Nenhuma falha.'
           : 'Nenhuma transferência concluída.';
@@ -758,7 +804,7 @@ async function openSiteManager() {
           <div class="with-btn"><input name="localDir" class="input" spellcheck="false"><button type="button" class="btn" data-a="pickDir">Escolher…</button></div>
         </label>
       </div>
-      <p class="hint">As senhas são criptografadas com o Keychain do macOS. Deixe o campo em branco para manter a senha salva.</p>
+      <p class="hint">As senhas são criptografadas com ${esc(SECRET_STORE)}. Deixe o campo em branco para manter a senha salva.</p>
       <div class="form-actions">
         <button type="button" class="btn" data-a="save">Salvar</button>
         <button type="submit" class="btn primary">Conectar</button>
@@ -909,7 +955,7 @@ const App = {
     oz.on('queue:done', ({ direction, local, remote }) => {
       const pane = direction === 'up' ? this.remote : this.local;
       const dest = direction === 'up' ? remote : local;
-      if (pane.path && parentPath(dest) === pane.path) this.scheduleRefresh(pane);
+      if (pane.path && pane.parent(dest) === pane.path) this.scheduleRefresh(pane);
     });
 
     const start = storage.get('local-path', null);
@@ -971,6 +1017,7 @@ const App = {
       this.connect(params);
     });
 
+    $('#btn-sites').title = `Gerenciador de sites (${MOD_KEY}S)`;
     $('#btn-sites').onclick = () => openSiteManager();
     $('#btn-disconnect').onclick = () => this.disconnect();
     document.addEventListener('keydown', (e) => {
@@ -1053,10 +1100,11 @@ const App = {
       return;
     }
     if (!entries.length || !toDir) return;
+    const toPane = fromPane.other;
     const items = entries.map((e) =>
       fromPane.isRemote
-        ? { direction: 'down', remote: joinPath(fromDir, e.name), local: joinPath(toDir, e.name), isDir: e.isDir, size: e.size }
-        : { direction: 'up', local: joinPath(fromDir, e.name), remote: joinPath(toDir, e.name) },
+        ? { direction: 'down', remote: fromPane.joinIn(fromDir, e.name), local: toPane.joinIn(toDir, e.name), isDir: e.isDir, size: e.size }
+        : { direction: 'up', local: fromPane.joinIn(fromDir, e.name), remote: toPane.joinIn(toDir, e.name) },
     );
     oz.queue.add(items).catch((err) => Log.error(`Não foi possível adicionar à fila: ${err.message}`));
   },
@@ -1073,7 +1121,7 @@ const App = {
     if (!pane.isRemote) {
       return [
         { label: 'Enviar para o servidor', disabled: !sel.length || !this.connected, action: () => this.transfer(pane, sel) },
-        { label: 'Mostrar no Finder', disabled: !one, action: () => oz.local.reveal(joinPath(pane.path, sel[0].name)) },
+        { label: `Mostrar no ${FILE_MANAGER}`, disabled: !one, action: () => oz.local.reveal(pane.joinIn(pane.path, sel[0].name)) },
         '-',
         { label: 'Nova pasta…', action: () => this.newFolder(pane) },
         { label: 'Renomear…', disabled: !one, action: () => this.rename(pane) },
@@ -1091,7 +1139,7 @@ const App = {
       { label: 'Permissões…', disabled: !sel.length, action: () => this.chmod(pane) },
       {
         label: 'Copiar caminho',
-        action: () => navigator.clipboard.writeText(one ? joinPath(pane.path, sel[0].name) : pane.path),
+        action: () => navigator.clipboard.writeText(one ? pane.joinIn(pane.path, sel[0].name) : pane.path),
       },
       '-',
       refresh,
@@ -1101,9 +1149,9 @@ const App = {
   async newFolder(pane) {
     const name = await promptDialog('Nova pasta', 'Nome da pasta:', 'Nova pasta');
     if (!name) return;
-    if (name.includes('/')) return Log.error('O nome não pode conter "/"');
+    if (pane.invalidName(name)) return Log.error('Nome inválido: contém caracteres não permitidos');
     try {
-      await pane.api.mkdir(joinPath(pane.path, name));
+      await pane.api.mkdir(pane.joinIn(pane.path, name));
       await pane.refresh();
       pane.sel = new Set([name]);
       pane.paintSelection();
@@ -1117,10 +1165,10 @@ const App = {
     if (!item) return;
     const name = await promptDialog('Renomear', `Novo nome para "${item.name}":`, item.name);
     if (!name || name === item.name) return;
-    if (name.includes('/')) return Log.error('O nome não pode conter "/"');
+    if (pane.invalidName(name)) return Log.error('Nome inválido: contém caracteres não permitidos');
     if (pane.entries.some((e) => e.name === name)) return Log.error(`Já existe um item chamado "${name}"`);
     try {
-      await pane.api.rename(joinPath(pane.path, item.name), joinPath(pane.path, name));
+      await pane.api.rename(pane.joinIn(pane.path, item.name), pane.joinIn(pane.path, name));
       Log.info(`Renomeado: ${item.name} → ${name}`);
       await pane.refresh();
       pane.sel = new Set([name]);
@@ -1143,11 +1191,11 @@ const App = {
           true,
         );
         if (!ok) return;
-        await oz.remote.delete(sel.map((e) => ({ path: joinPath(pane.path, e.name), isDir: e.isDir })));
+        await oz.remote.delete(sel.map((e) => ({ path: pane.joinIn(pane.path, e.name), isDir: e.isDir })));
       } else {
         const ok = await confirmDialog('Mover para a Lixeira', `Mover ${what} para a Lixeira?`, 'Mover', true);
         if (!ok) return;
-        await oz.local.trash(sel.map((e) => joinPath(pane.path, e.name)));
+        await oz.local.trash(sel.map((e) => pane.joinIn(pane.path, e.name)));
         Log.info(`${what} movido(s) para a Lixeira`);
       }
     } catch (e) {
@@ -1222,7 +1270,7 @@ const App = {
     if (mode == null) return;
     try {
       await oz.remote.chmod(
-        sel.map((e) => joinPath(pane.path, e.name)),
+        sel.map((e) => pane.joinIn(pane.path, e.name)),
         mode,
       );
       await pane.refresh();

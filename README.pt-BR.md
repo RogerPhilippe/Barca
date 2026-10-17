@@ -2,7 +2,7 @@
 
 # Barca
 
-Cliente FTP, FTPS e SFTP moderno para macOS, nativo para Apple Silicon.
+Cliente FTP, FTPS e SFTP moderno para macOS (Apple Silicon), Windows e Linux.
 
 Gerenciador de arquivos em dois painéis (local ⇄ servidor), fila de
 transferências, gerenciador de sites e log de operações — feito com Electron,
@@ -16,19 +16,33 @@ Node.js e HTML5/CSS/JavaScript puro.
 ## Recursos
 
 - **Protocolos:** SFTP (senha ou chave privada), FTPS (explícito e implícito) e FTP
-- **Dois painéis:** colunas ordenáveis, seleção múltipla (⌘/⇧), navegação por teclado, caminho editável
-- **Arrastar e soltar:** entre os painéis ou do Finder direto para o servidor
+- **Dois painéis:** colunas ordenáveis, seleção múltipla (⌘ ou Ctrl, ⇧), navegação por teclado, caminho editável
+- **Arrastar e soltar:** entre os painéis ou do Finder ou Explorador de Arquivos direto para o servidor
 - **Fila de transferências:** 2 conexões em paralelo, pastas recursivas, progresso e
   velocidade, cancelar, repetir, sobrescrever ou pular arquivos existentes
 - **Operações remotas:** nova pasta, renomear, excluir, permissões (chmod), copiar caminho
-- **Gerenciador de sites:** senhas criptografadas com o Keychain do macOS (`safeStorage`)
+- **Gerenciador de sites:** senhas criptografadas pelo cofre do sistema (Keychain do macOS, DPAPI do Windows, GNOME Keyring ou KWallet)
 - **Segurança:** confirmação da impressão digital da chave SSH e alerta de mudança;
   aviso ao usar FTP sem criptografia
 - Tema claro/escuro automático
 
+## Download
+
+Baixe a versão mais recente na página de [Releases](https://github.com/RogerPhilippe/Barca/releases):
+
+| Sistema | Arquivo |
+|---|---|
+| macOS (Apple Silicon) | `Barca-<versão>-macos-arm64.zip` |
+| Windows x64 | `Barca-<versão>-windows-x64.zip` |
+| Linux x64 | `Barca-<versão>-linux-x64.tar.gz` |
+
+Os builds não são assinados pela Apple nem pela Microsoft, então o sistema
+mostra um aviso na primeira abertura. As notas do release explicam como
+liberar em cada sistema.
+
 ## Rodando localmente
 
-Requisitos: macOS 12+, Node.js 20+
+Requisitos: Node.js 20+
 
 ```bash
 npm install
@@ -39,12 +53,14 @@ npm start
 ## Gerando o app
 
 ```bash
-npm run icon   # gera build/icon.icns a partir de build/icon.svg
-npm run dist   # gera dist/Barca-darwin-arm64/Barca.app
+npm run icon        # gera os ícones a partir de build/icon.svg (requer macOS)
+npm run dist        # gera macOS arm64, Windows x64 e Linux x64 em dist/
+npm run dist:mac    # ou uma plataforma só: dist:mac, dist:win, dist:linux
 ```
 
-O app gerado tem assinatura ad-hoc. Para distribuir para outros Macs sem
-avisos do Gatekeeper, assine com um Developer ID e faça a notarização.
+O app do macOS recebe assinatura ad-hoc. Para distribuir sem avisos do
+Gatekeeper ou do SmartScreen, assine com um Developer ID (macOS) ou um
+certificado de assinatura de código (Windows).
 
 ## Estrutura do projeto
 

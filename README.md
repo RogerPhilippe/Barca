@@ -2,7 +2,7 @@
 
 # Barca
 
-A modern FTP, FTPS and SFTP client for macOS, native on Apple Silicon.
+A modern FTP, FTPS and SFTP client for macOS (Apple Silicon), Windows and Linux.
 
 Two-pane file manager (local ⇄ server), transfer queue, site manager and
 operation log — built with Electron, Node.js and plain HTML5/CSS/JavaScript.
@@ -15,19 +15,32 @@ operation log — built with Electron, Node.js and plain HTML5/CSS/JavaScript.
 ## Features
 
 - **Protocols:** SFTP (password or private key), FTPS (explicit and implicit) and FTP
-- **Dual pane:** sortable columns, multi-selection (⌘/⇧), keyboard navigation, editable path
-- **Drag and drop:** between panes, or from Finder straight to the server
+- **Dual pane:** sortable columns, multi-selection (⌘ or Ctrl, ⇧), keyboard navigation, editable path
+- **Drag and drop:** between panes, or from Finder or Explorer straight to the server
 - **Transfer queue:** 2 parallel connections, recursive folders, progress and speed,
   cancel, retry, overwrite or skip existing files
 - **Remote operations:** new folder, rename, delete, permissions (chmod), copy path
-- **Site manager:** passwords encrypted with the macOS Keychain (`safeStorage`)
+- **Site manager:** passwords encrypted by the system keychain (macOS Keychain, Windows DPAPI, GNOME Keyring or KWallet)
 - **Security:** SSH host key fingerprint confirmation and change alert;
   warning when using unencrypted FTP
 - Automatic light/dark theme
 
+## Download
+
+Get the latest version on the [Releases](https://github.com/RogerPhilippe/Barca/releases) page:
+
+| System | File |
+|---|---|
+| macOS (Apple Silicon) | `Barca-<version>-macos-arm64.zip` |
+| Windows x64 | `Barca-<version>-windows-x64.zip` |
+| Linux x64 | `Barca-<version>-linux-x64.tar.gz` |
+
+The builds are not signed by Apple or Microsoft, so the system shows a warning
+on first launch. The release notes explain how to allow it on each system.
+
 ## Running locally
 
-Requirements: macOS 12+, Node.js 20+
+Requirements: Node.js 20+
 
 ```bash
 npm install
@@ -38,12 +51,14 @@ npm start
 ## Building the app
 
 ```bash
-npm run icon   # generates build/icon.icns from build/icon.svg
-npm run dist   # generates dist/Barca-darwin-arm64/Barca.app
+npm run icon        # generates the icons from build/icon.svg (requires macOS)
+npm run dist        # builds macOS arm64, Windows x64 and Linux x64 into dist/
+npm run dist:mac    # or a single platform: dist:mac, dist:win, dist:linux
 ```
 
-The generated app has an ad-hoc signature. To distribute it to other Macs
-without Gatekeeper warnings, sign it with a Developer ID and notarize it.
+The macOS app gets an ad-hoc signature. To distribute without Gatekeeper or
+SmartScreen warnings, sign with a Developer ID (macOS) or a code-signing
+certificate (Windows).
 
 ## Project structure
 
