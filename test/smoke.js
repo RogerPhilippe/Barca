@@ -106,7 +106,17 @@ async function scenario(win) {
   await wait(400);
   fs.mkdirSync(outDir, { recursive: true });
   const shot = path.join(outDir, `smoke-${process.platform}.png`);
-  fs.writeFileSync(shot, (await wc.capturePage()).toPNG());
+  // Em telas virtuais o compositor às vezes ainda não tem um quadro pronto; tenta de novo.
+  let image = null;
+  for (let attempt = 1; !image; attempt++) {
+    try {
+      image = await wc.capturePage();
+    } catch (e) {
+      if (attempt === 3) throw e;
+      await wait(1000);
+    }
+  }
+  fs.writeFileSync(shot, image.toPNG());
   step(`captura salva em ${shot}`);
 
   assert.deepEqual(consoleErrors, [], 'sem erros no console da interface');
