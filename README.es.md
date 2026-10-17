@@ -79,11 +79,4 @@ Las contribuciones están sujetas a los términos de [CONTRIBUTING.es.md](CONTRI
 Las dependencias de terceros conservan sus propias licencias (MIT, Apache-2.0,
 BSD-3-Clause, ISC, Unlicense), todas compatibles con ambas opciones de licencia.
 
-## Aviso
-
-Barca es un proyecto independiente, escrito desde cero. No contiene código
-fuente de FileZilla® y no está afiliado, respaldado ni patrocinado por el
-proyecto FileZilla ni por Tim Kosse. FileZilla es una marca de su respectivo
-titular.
-
 Copyright © 2026 Roger Philippe Pereira

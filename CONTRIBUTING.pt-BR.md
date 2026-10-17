@@ -16,8 +16,8 @@ seguinte.
 
 ## Regra de "sala limpa"
 
-A Barca é escrita do zero. **Não envie código copiado ou adaptado do
-FileZilla nem de qualquer outro projeto cuja licença seja incompatível com o
+A Barca é escrita do zero. **Não envie código copiado ou adaptado de
+projetos cuja licença seja incompatível com o
 modelo de dupla licença deste projeto** (por exemplo, código somente GPL).
 As contribuições devem ser trabalho original seu, ou vir de fontes sob
 licenças permissivas (MIT, BSD, Apache-2.0, ISC) com os avisos preservados.

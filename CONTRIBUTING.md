@@ -15,7 +15,7 @@ Thanks for your interest in contributing! Please read the following before openi
 ## Clean-room rule
 
 Barca is written from scratch. **Do not submit code copied or adapted
-from FileZilla or any other project whose license is incompatible with this
+from any project whose license is incompatible with this
 project's dual-license model** (for example, GPL-only code). Contributions
 must be your own original work, or come from sources under permissive
 licenses (MIT, BSD, Apache-2.0, ISC) with their notices preserved.

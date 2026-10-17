@@ -17,7 +17,7 @@ siguiente.
 ## Regla de "sala limpia"
 
 Barca está escrita desde cero. **No envíe código copiado o adaptado de
-FileZilla ni de ningún otro proyecto cuya licencia sea incompatible con el
+proyectos cuya licencia sea incompatible con el
 modelo de doble licencia de este proyecto** (por ejemplo, código solo GPL).
 Las contribuciones deben ser trabajo original suyo, o provenir de fuentes
 bajo licencias permisivas (MIT, BSD, Apache-2.0, ISC) con sus avisos

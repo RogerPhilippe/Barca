@@ -78,10 +78,4 @@ Contribuições estão sujeitas aos termos em [CONTRIBUTING.pt-BR.md](CONTRIBUTI
 As dependências de terceiros mantêm suas próprias licenças (MIT, Apache-2.0,
 BSD-3-Clause, ISC, Unlicense), todas compatíveis com as duas opções de licença.
 
-## Aviso
-
-A Barca é um projeto independente, escrito do zero. Não contém código-fonte
-do FileZilla® e não é afiliado, endossado nem patrocinado pelo projeto
-FileZilla ou por Tim Kosse. FileZilla é uma marca de seu respectivo titular.
-
 Copyright © 2026 Roger Philippe Pereira

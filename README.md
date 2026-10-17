@@ -77,11 +77,4 @@ Contributions are subject to the terms in [CONTRIBUTING.md](CONTRIBUTING.md).
 Third-party dependencies keep their own licenses (MIT, Apache-2.0,
 BSD-3-Clause, ISC, Unlicense), all compatible with both license options.
 
-## Disclaimer
-
-Barca is an independent project written from scratch. It contains no
-source code from FileZilla® and is not affiliated with, endorsed by, or
-sponsored by the FileZilla project or Tim Kosse. FileZilla is a trademark of
-its respective owner.
-
 Copyright © 2026 Roger Philippe Pereira
