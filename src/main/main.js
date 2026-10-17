@@ -1,5 +1,5 @@
 'use strict';
-const { app, BrowserWindow, ipcMain, dialog, shell, safeStorage, nativeTheme } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, safeStorage, nativeTheme, screen } = require('electron');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -224,11 +224,15 @@ function registerIpc() {
 }
 
 function createWindow() {
+  // Tamanho inicial limitado à área útil da tela: o Windows não reduz janelas maiores que o monitor.
+  const area = screen.getPrimaryDisplay().workAreaSize;
+  const width = Math.min(1320, area.width);
+  const height = Math.min(860, area.height);
   win = new BrowserWindow({
-    width: 1320,
-    height: 860,
-    minWidth: 960,
-    minHeight: 600,
+    width,
+    height,
+    minWidth: Math.min(960, width),
+    minHeight: Math.min(600, height),
     title: 'Barca',
     ...(process.platform === 'darwin'
       ? { titleBarStyle: 'hiddenInset' }
