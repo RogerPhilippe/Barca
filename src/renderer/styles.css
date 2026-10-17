@@ -51,6 +51,7 @@ body {
 body {
   display: grid;
   grid-template-rows: auto var(--log-h) 5px minmax(160px, 1fr) 5px var(--queue-h);
+  grid-template-columns: minmax(0, 1fr);
   background: var(--bg);
   color: var(--text);
   font: 13px/1.4 -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
@@ -93,6 +94,7 @@ select {
 
 .brand {
   display: flex;
+  flex: none;
   align-items: center;
   gap: 8px;
   font-weight: 650;
@@ -123,12 +125,12 @@ select {
 
 .quick .host {
   flex: 1.6;
-  min-width: 120px;
+  min-width: 90px;
 }
 
 .quick input {
   flex: 1;
-  min-width: 70px;
+  min-width: 56px;
 }
 
 .quick .port {
@@ -238,6 +240,7 @@ select.input {
 }
 
 .conn {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -332,7 +335,7 @@ select.input {
 
 .panes {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
   padding: 8px;
   min-height: 0;
