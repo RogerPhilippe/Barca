@@ -8,6 +8,11 @@ Gerenciador de arquivos em dois painéis (local ⇄ servidor), fila de
 transferências, gerenciador de sites e log de operações — feito com Electron,
 Node.js e HTML5/CSS/JavaScript puro.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
+  <img alt="Barca conectada a um site salvo por SFTP, com envios em andamento" src="docs/screenshot-light.png">
+</picture>
+
 ## Recursos
 
 - **Protocolos:** SFTP (senha ou chave privada), FTPS (explícito e implícito) e FTP

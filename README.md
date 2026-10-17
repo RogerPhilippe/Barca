@@ -7,6 +7,11 @@ A modern FTP, FTPS and SFTP client for macOS, native on Apple Silicon.
 Two-pane file manager (local ⇄ server), transfer queue, site manager and
 operation log — built with Electron, Node.js and plain HTML5/CSS/JavaScript.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
+  <img alt="Barca with a saved site connected over SFTP and uploads in progress" src="docs/screenshot-light.png">
+</picture>
+
 ## Features
 
 - **Protocols:** SFTP (password or private key), FTPS (explicit and implicit) and FTP

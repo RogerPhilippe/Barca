@@ -8,6 +8,11 @@ Gestor de archivos de dos paneles (local ⇄ servidor), cola de transferencias,
 gestor de sitios y registro de operaciones — hecho con Electron, Node.js y
 HTML5/CSS/JavaScript puro.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
+  <img alt="Barca conectada a un sitio guardado por SFTP, con envíos en curso" src="docs/screenshot-light.png">
+</picture>
+
 ## Funcionalidades
 
 - **Protocolos:** SFTP (contraseña o clave privada), FTPS (explícito e implícito) y FTP
