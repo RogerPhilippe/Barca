@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    />
+    <title>Barca</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <div class="brand"><span class="logo"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M11.2 3.5v9.2H5.4zM12.8 5v7.7h5.2zM11.2 3h1.6v11h-1.6zM3.6 14.2h16.8l-2.3 3.3H5.9z" /></svg></span
+        >Barca</div>
+      <button id="btn-sites" class="btn" type="button" title="Gerenciador de sites (⌘S)">Sites</button>
+      <form id="quick" class="quick" autocomplete="off">
+        <select id="q-proto" class="input" title="Protocolo">
+          <option value="sftp">SFTP</option>
+          <option value="ftps">FTPS</option>
+          <option value="ftps-implicit">FTPS implícito</option>
+          <option value="ftp">FTP</option>
+        </select>
+        <input id="q-host" class="input host" placeholder="Servidor ou sftp://usuario@host" spellcheck="false" />
+        <input id="q-user" class="input" placeholder="Usuário" spellcheck="false" />
+        <input id="q-pass" class="input" type="password" placeholder="Senha" />
+        <input id="q-port" class="input port" placeholder="22" inputmode="numeric" />
+        <button id="btn-connect" class="btn primary" type="submit">Conectar</button>
+      </form>
+      <div class="conn" id="conn">
+        <span class="dot"></span>
+        <span id="conn-label">Desconectado</span>
+        <button id="btn-disconnect" class="btn ghost" type="button" hidden>Desconectar</button>
+      </div>
+    </header>
+
+    <section id="log" class="log" aria-label="Registro de mensagens"></section>
+    <div class="resizer" data-resize="log"></div>
+
+    <main class="panes">
+      <section class="pane" id="pane-local"></section>
+      <section class="pane" id="pane-remote"></section>
+    </main>
+
+    <div class="resizer" data-resize="queue"></div>
+    <section class="queue" id="queue">
+      <div class="queue-bar">
+        <div class="tabs">
+          <button class="tab active" data-tab="pending">Na fila <b data-count="pending">0</b></button>
+          <button class="tab" data-tab="failed">Falharam <b data-count="failed">0</b></button>
+          <button class="tab" data-tab="done">Concluídas <b data-count="done">0</b></button>
+        </div>
+        <div class="queue-summary" id="queue-summary"></div>
+        <label class="overwrite">
+          Arquivo existente:
+          <select id="q-overwrite" class="input small">
+            <option value="overwrite">Sobrescrever</option>
+            <option value="skip">Pular</option>
+          </select>
+        </label>
+        <button class="btn small" data-qa="retry" type="button">Repetir falhas</button>
+        <button class="btn small" data-qa="clear" type="button">Limpar</button>
+        <button class="btn small danger ghost" data-qa="cancelAll" type="button">Cancelar tudo</button>
+      </div>
+      <div class="queue-table-wrap">
+        <table class="qtable">
+          <thead>
+            <tr>
+              <th class="qdir"></th>
+              <th>Arquivo local</th>
+              <th>Arquivo remoto</th>
+              <th class="qsize">Tamanho</th>
+              <th class="qstatus">Status</th>
+              <th class="qact"></th>
+            </tr>
+          </thead>
+          <tbody id="queue-body"></tbody>
+        </table>
+        <div class="queue-empty" id="queue-empty">Arraste arquivos entre os painéis para transferir.</div>
+      </div>
+    </section>
+
+    <div id="menu" class="menu" hidden></div>
+    <script src="app.js"></script>
+  </body>
+</html>

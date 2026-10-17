@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3aa8f0"/>
+      <stop offset="1" stop-color="#0b4f8a"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="tile">
+      <rect x="100" y="100" width="824" height="824" rx="185"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#bg)"/>
+    <rect x="100" y="100" width="824" height="412" fill="url(#shine)"/>
+    <!-- velas -->
+    <path d="M492 250V570H270z" fill="#fff"/>
+    <path d="M532 290V570H730z" fill="#fff" opacity="0.92"/>
+    <!-- setas: envio (vela esquerda) e download (vela direita) -->
+    <path d="M436 540V420M436 420l-34 36M436 420l34 36" stroke="#1673b8" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M590 400V520M590 520l-34-36M590 520l34-36" stroke="#1673b8" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <!-- mastro e casco -->
+    <rect x="497" y="240" width="30" height="370" rx="10" fill="#fff"/>
+    <path d="M236 606H788L712 702H312z" fill="#fff"/>
+    <!-- ondas -->
+    <path d="M120 772q66-34 132 0t132 0t132 0t132 0t132 0t132 0" stroke="#fff" stroke-opacity="0.55" stroke-width="26" stroke-linecap="round" fill="none"/>
+    <path d="M60 850q66-34 132 0t132 0t132 0t132 0t132 0t132 0t132 0" stroke="#fff" stroke-opacity="0.28" stroke-width="26" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

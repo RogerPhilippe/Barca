@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.utilities</string>
+  <key>NSDesktopFolderUsageDescription</key>
+  <string>Listar arquivos da Mesa para enviá-los ao servidor ou salvar downloads.</string>
+  <key>NSDocumentsFolderUsageDescription</key>
+  <string>Listar arquivos de Documentos para enviá-los ao servidor ou salvar downloads.</string>
+  <key>NSDownloadsFolderUsageDescription</key>
+  <string>Listar arquivos de Downloads para enviá-los ao servidor ou salvar downloads.</string>
+  <key>NSNetworkVolumesUsageDescription</key>
+  <string>Listar arquivos em volumes de rede para transferências.</string>
+  <key>NSRemovableVolumesUsageDescription</key>
+  <string>Listar arquivos em discos removíveis para transferências.</string>
+</dict>
+</plist>

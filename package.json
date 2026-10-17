@@ -1,0 +1,27 @@
+{
+  "name": "barca",
+  "productName": "Barca",
+  "version": "1.0.0",
+  "description": "Cliente FTP, FTPS e SFTP moderno para macOS",
+  "main": "src/main/main.js",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "icon": "bash scripts/make-icon.sh",
+    "dist": "electron-packager . Barca --platform=darwin --arch=arm64 --out=dist --overwrite --icon=build/icon.icns --app-bundle-id=org.barcaftp.barca --extend-info=build/extend-info.plist --ignore=^/dist --ignore=^/scripts --ignore=^/build"
+  },
+  "dependencies": {
+    "basic-ftp": "^6.2.3",
+    "ssh2-sftp-client": "^12.1.1"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.9.0"
+  },
+  "allowScripts": {
+    "cpu-features": false,
+    "ssh2": false
+  },
+  "author": "Roger Philippe Pereira <rogerphilippepereira@gmail.com>"
+}
