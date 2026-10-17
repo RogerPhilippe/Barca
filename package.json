@@ -1,7 +1,7 @@
 {
   "name": "barca",
   "productName": "Barca",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Cliente FTP, FTPS e SFTP moderno para macOS",
   "main": "src/main/main.js",
   "license": "AGPL-3.0-or-later",
