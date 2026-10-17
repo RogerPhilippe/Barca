@@ -67,12 +67,16 @@ const targets = {
     options: { platform: 'linux', arch: 'x64', executableName: 'barca' },
     archive: `Barca-${version}-linux-x64.tar.gz`,
     finish(appDir, archive) {
-      // Sem metadados do macOS (._*, xattrs) e com dono neutro dentro do tar.
-      execFileSync(
-        'tar',
-        ['--no-mac-metadata', '--no-xattrs', '--uid', '0', '--gid', '0', '-czf', archive, path.basename(appDir)],
-        { cwd: dist, stdio: 'inherit', env: { ...process.env, COPYFILE_DISABLE: '1' } },
-      );
+      // Dono neutro dentro do tar; no macOS (bsdtar) também sem metadados ._* e xattrs.
+      const flags =
+        process.platform === 'darwin'
+          ? ['--no-mac-metadata', '--no-xattrs', '--uid', '0', '--gid', '0']
+          : ['--owner=0', '--group=0', '--numeric-owner'];
+      execFileSync('tar', [...flags, '-czf', archive, path.basename(appDir)], {
+        cwd: dist,
+        stdio: 'inherit',
+        env: { ...process.env, COPYFILE_DISABLE: '1' },
+      });
     },
   },
 };
