@@ -17,7 +17,7 @@ const common = {
   overwrite: true,
   asar: true,
   appCopyright: 'Copyright © 2026 Roger Philippe Pereira',
-  ignore: [/^\/dist($|\/)/, /^\/scripts($|\/)/, /^\/build($|\/)/, /^\/docs($|\/)/, /^\/\.git/, /^\/[^/]+\.md$/],
+  ignore: [/^\/dist($|\/)/, /^\/scripts($|\/)/, /^\/test(-output)?($|\/)/, /^\/build($|\/)/, /^\/docs($|\/)/, /^\/\.git/, /^\/[^/]+\.md$/],
 };
 
 const run = (cmd, args, cwd = dist) => execFileSync(cmd, args, { cwd, stdio: 'inherit' });

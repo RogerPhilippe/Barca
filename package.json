@@ -12,7 +12,9 @@
     "dist": "node scripts/package.js all",
     "dist:mac": "node scripts/package.js mac",
     "dist:win": "node scripts/package.js win",
-    "dist:linux": "node scripts/package.js linux"
+    "dist:linux": "node scripts/package.js linux",
+    "test": "node test/backend.test.js",
+    "test:smoke": "electron test/smoke.js"
   },
   "dependencies": {
     "basic-ftp": "^6.2.3",
@@ -20,7 +22,8 @@
   },
   "devDependencies": {
     "@electron/packager": "^20.3.0",
-    "electron": "^44.9.0"
+    "electron": "^44.9.0",
+    "ftp-srv": "^4.6.3"
   },
   "allowScripts": {
     "cpu-features": false,
