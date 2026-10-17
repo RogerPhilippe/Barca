@@ -95,8 +95,8 @@ async function scenario(win) {
   const save = await js(`try { await oz.sites.save({ name: 'teste', protocol: 'sftp', host: 'h', user: 'u', password: 'p' });
     return 'salvou'; } catch (e) { return e.message; }`);
   if (process.platform === 'linux' && safeStorage.getSelectedStorageBackend() === 'basic_text') {
-    assert.match(save, /cofre de senhas/, 'Linux sem cofre recusa salvar senha');
-    step('Linux sem cofre de senhas: salvar senha foi recusado, como esperado');
+    assert.match(save, /não pode ser salva com segurança/, `Linux sem cofre deve recusar salvar senha, veio: ${save}`);
+    step(`Linux sem cofre de senhas: salvar senha foi recusado, como esperado ("${save}")`);
   } else {
     assert.equal(save, 'salvou');
     step('senha salva no cofre do sistema');

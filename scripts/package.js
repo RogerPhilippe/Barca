@@ -55,7 +55,12 @@ const targets = {
     },
     archive: `Barca-${version}-windows-x64.zip`,
     finish(appDir, archive) {
-      run('zip', ['-qry', '-X', archive, path.basename(appDir)]);
+      if (process.platform === 'win32') {
+        // O tar.exe do Windows (bsdtar) gera zip; o tar do Git Bash, não.
+        run(path.join(process.env.SystemRoot, 'System32', 'tar.exe'), ['-a', '-c', '-f', archive, path.basename(appDir)]);
+      } else {
+        run('zip', ['-qry', '-X', archive, path.basename(appDir)]);
+      }
     },
   },
   linux: {
